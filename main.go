@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -23,6 +22,7 @@ type employee struct {
 
 //prints the heirarchy of the employess
 func printCompanyHeirarchy(e *employee, level int) {
+
 	//for each level we need that many tabs
 	for i := 0; i <= level; i++ {
 		fmt.Print("\t")
@@ -40,8 +40,8 @@ func parseRecord(record string) (*employee, error) {
 
 	data := strings.Split(record, ",")
 
-	if len(data) < 0 || len(data) > 3 {
-		return nil, errors.New(("wrong number of delimeters"))
+	if len(data) != 3 {
+		return nil, fmt.Errorf("wrong number of delimeters or input format wrong data:%s", data)
 	}
 
 	name := strings.Trim(strings.TrimSpace(data[0]), "\"")
@@ -49,7 +49,7 @@ func parseRecord(record string) (*employee, error) {
 	managerID := strings.Trim(strings.TrimSpace(data[2]), "\"")
 
 	if id == "" {
-		return nil, errors.New("employee ID can not be empty exiting now")
+		return nil, fmt.Errorf("employee ID can not be empty exiting now data:%s", data)
 	}
 
 	//make sure your are trimmimg all spaces when putting in map
@@ -89,19 +89,11 @@ func loadData(fileName string) (map[string]*employee, error) {
 	return employeeMap, nil
 }
 
-func main() {
-	dataFile := flag.String("data", "data.csv", "file name")
-
-	employeeMap, err := loadData(*dataFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+// Link the employees by iterating through the map and assign each employees manager and his employees
+// this linking can be further optimized when reading the data itself but for code readbility purpose we are
+// iterating in seperately
+func linkRelationShip(employeeMap map[string]*employee) (*employee, error) {
 	var ceo *employee
-
-	// Link the employees by iterating through the map and assign each employees manager and his employees
-	// this linking can be further optimized when reading the data itself but for code readbility purpose we are
-	// iterating in seperately
 	for _, emp := range employeeMap {
 
 		//check if employee's manager exists. If he exists create the employee - manager relation ship
@@ -112,15 +104,43 @@ func main() {
 			m.Employees = append(m.Employees, emp)
 			employeeMap[emp.ID] = emp
 			employeeMap[m.ID] = m
+			if m.ManagerID == emp.ID {
+				return nil, fmt.Errorf("circular dependency found  emp ID: %s manager ID: %s", emp.ID, m.ManagerID)
+			}
 		} else {
 			// if we have got only one employee who doesn't have a manager. we are assuming data is given like that
 			if ceo != nil {
-				log.Fatal("we can not have more than one employee with out manager stopping now")
+				return nil, fmt.Errorf("we can not have more than one employee with out manager, Name: %s, ID: %s, Manager ID: %s", emp.Name, emp.ID, emp.ManagerID)
+			}
+			if emp.ManagerID != "" {
+				return nil, fmt.Errorf("manager for this employee doesn't exist emp ID: %s manager ID: %s", emp.ID, emp.ManagerID)
 			}
 			log.Println("can not find manager for employee, ceo is:", emp.Name, emp.ID, emp.ManagerID)
 			ceo = emp
 		}
 
+	}
+	return ceo, nil
+}
+
+func main() {
+
+	dataFile := flag.String("data", "test1.csv", "file name")
+	flag.Parse()
+
+	log.Println("data file is", *dataFile)
+
+	employeeMap, err := loadData(*dataFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ceo, err := linkRelationShip(employeeMap)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if ceo == nil {
+		log.Fatal("there is no ceo for this company")
 	}
 
 	//print the heirarchy of employees
