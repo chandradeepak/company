@@ -16,51 +16,16 @@ type employee struct {
 	Name      string
 }
 
-func printH(e *employee, level int) {
+func printHeirarchy(e *employee, level int) {
 	for i := 0; i <= level; i++ {
 		fmt.Print("\t")
 	}
 	fmt.Println(e.Name)
 	l := level + 1
 	for _, emp := range e.Employees {
-		printH(emp, l)
+		printHeirarchy(emp, l)
 	}
 
-}
-
-func printHeirarchicalStructure(e *employee) {
-
-	if e == nil {
-		return
-	}
-	var employees []*employee
-	//add the root node who is the ceo
-	employees = append(employees, e)
-
-	level := 0
-	for {
-		nodeCount := len(employees)
-		if nodeCount == 0 {
-			break
-		}
-		//print all employess at this level
-		for j := 0; j < nodeCount; j++ {
-
-			deQueuedEmp := employees[j]
-			for i := 0; i < level; i++ {
-				fmt.Print("\t")
-			}
-			fmt.Print(deQueuedEmp.Name)
-			employees = append(employees, deQueuedEmp.Employees...)
-			for i := 0; i <= len(deQueuedEmp.Employees); i++ {
-				fmt.Println("")
-			}
-
-		}
-		employees = employees[nodeCount:]
-		level++
-
-	}
 }
 
 func main() {
@@ -98,25 +63,7 @@ func main() {
 		}
 
 	}
-	// log.Println(ceo)
 
-	// for _, emp := range employeeMap {
-	// 	fmt.Println("id:", emp.ID)
-	// 	fmt.Println("name:", emp.Name)
-	// 	if emp.Manager != nil {
-	// 		fmt.Println("magnager name:", emp.Manager.Name)
-	// 	}
-	// 	if emp.Employees != nil {
-	// 		for _, es := range emp.Employees {
-	// 			fmt.Println("employess name:", es.Name)
-
-	// 		}
-	// 	}
-
-	// }
-
-	printH(ceo, 0)
-
-	// printHeirarchicalStructure(ceo)
+	printHeirarchy(ceo, 0)
 
 }
