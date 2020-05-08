@@ -23,7 +23,7 @@ var (
 	errManagerDoesNtExist      = "manager for this employee doesn't exist emp ID: %s manager ID: %s"
 )
 
-//since it is mentioned the company is small we are gong to go with in memory tree stucture and going
+//since it is mentioned the company is small we are going to go with in memory tree structure and going
 // to use map for quick reference. for large companies it would be easy to store data in database
 type employee struct {
 	ID        string
@@ -33,8 +33,8 @@ type employee struct {
 	Name      string
 }
 
-//prints the heirarchy of the employess
-func printCompanyHeirarchy(e *employee, level int) {
+//prints the hierarchy of the employess
+func printCompanyHierarchy(e *employee, level int) {
 
 	//for each level we need that many tabs
 	for i := 0; i <= level; i++ {
@@ -44,7 +44,7 @@ func printCompanyHeirarchy(e *employee, level int) {
 	fmt.Println(e.Name)
 	l := level + 1
 	for _, emp := range e.Employees {
-		printCompanyHeirarchy(emp, l)
+		printCompanyHierarchy(emp, l)
 	}
 
 }
@@ -65,7 +65,7 @@ func parseRecord(record string) (*employee, error) {
 		return nil, fmt.Errorf(errEmpIDEmpty, data)
 	}
 
-	//make sure your are trimmimg all spaces when putting in map
+	//make sure your are trimming all spaces when putting in map
 	e := &employee{Name: name, ID: id, ManagerID: managerID}
 	return e, nil
 
@@ -103,7 +103,7 @@ func loadData(fileName string) (map[string]*employee, error) {
 }
 
 // Link the employees by iterating through the map and assign each employees manager and his employees
-// this linking can be further optimized when reading the data itself but for code readbility purpose we are
+// this linking can be further optimized when reading the data itself but for code readability purpose we are
 // iterating in seperately
 func linkRelationShip(employeeMap map[string]*employee) (*employee, error) {
 	var ceo *employee
@@ -156,6 +156,6 @@ func main() {
 		log.Fatal("there is no ceo for this company")
 	}
 
-	//print the heirarchy of employees
-	printCompanyHeirarchy(ceo, 0)
+	//print the hierarchy of employees
+	printCompanyHierarchy(ceo, 0)
 }
