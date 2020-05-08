@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"strings"
@@ -31,6 +32,62 @@ type employee struct {
 	Employees []*employee
 	ManagerID string
 	Name      string
+}
+
+type company struct {
+	Data [][]string
+}
+
+func printHTML(c company) error {
+	tmpl := template.Must(template.New("example").Parse(`
+			<html>
+			<head>
+			<style>
+			table, th, td {
+			border: 1px solid black;
+			}
+			</style>
+			</head>
+			<body>
+			<table style="width:100%">
+					{{ $a := .Data }}
+					{{ range $a }}
+					<tr>
+					{{ $elem := . }}
+					{{ range $elem }}
+						<td>{{.}}</td>
+					{{ end}}
+					</tr>
+					{{end}}
+			</table>
+			</body>
+			</html>
+			`))
+
+	data, err := os.Create("data.html")
+	if err != nil {
+		return err
+	}
+
+	err = tmpl.Execute(data, c)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func formHtML(c *company, e *employee, height *int, width int) {
+	for i := 0; i < width; i++ {
+		c.Data[*height] = append(c.Data[*height], "\t")
+	}
+
+	c.Data[*height] = append(c.Data[*height], e.Name)
+	c.Data = append(c.Data, make([]string, 0))
+	*height = *height + 1
+	width = width + 1
+	for _, emp := range e.Employees {
+		formHtML(c, emp, height, width)
+	}
 }
 
 //prints the hierarchy of the employess
@@ -154,6 +211,12 @@ func main() {
 		log.Fatal("there is no ceo for this company")
 	}
 
+	var c company
+	c.Data = make([][]string, 0)
+	c.Data = append(c.Data, make([]string, 0))
 	//print the hierarchy of employees
 	printCompanyHierarchy(ceo, 0)
+	height := 0
+	formHtML(&c, ceo, &height, 0)
+	printHTML(c)
 }
