@@ -50,6 +50,94 @@
                                 Chandra
 ```
 
+
+## Printing html
+Running would make a data.html like below. which you can open to see the html table
+```html
+
+			<html>
+			<head>
+			<style>
+			table, th, td {
+			border: 1px solid black;
+			}
+			</style>
+			</head>
+			<body>
+			<table style="width:100%">
+					
+					
+					<tr>
+					
+					
+						<td>Jamie</td>
+					
+					</tr>
+					
+					<tr>
+					
+					
+						<td>	</td>
+					
+						<td>Alan</td>
+					
+					</tr>
+					
+					<tr>
+					
+					
+						<td>	</td>
+					
+						<td>	</td>
+					
+						<td>Martin</td>
+					
+					</tr>
+					
+					<tr>
+					
+					
+						<td>	</td>
+					
+						<td>	</td>
+					
+						<td>Alex</td>
+					
+					</tr>
+					
+					<tr>
+					
+					
+						<td>	</td>
+					
+						<td>Steve</td>
+					
+					</tr>
+					
+					<tr>
+					
+					
+						<td>	</td>
+					
+						<td>	</td>
+					
+						<td>David</td>
+					
+					</tr>
+					
+					<tr>
+					
+					
+					</tr>
+					
+			</table>
+			</body>
+			</html>
+			
+```
+
+
+
 ## Testing
 ```bash
 go test -v
