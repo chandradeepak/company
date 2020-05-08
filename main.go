@@ -128,7 +128,7 @@ func linkRelationShip(employeeMap map[string]*employee) (*employee, error) {
 			if emp.ManagerID != "" {
 				return nil, fmt.Errorf(errManagerDoesNtExist, emp.ID, emp.ManagerID)
 			}
-			log.Println("can not find manager for employee, ceo is:", emp.Name, emp.ID, emp.ManagerID)
+			// log.Println("can not find manager for employee, ceo is:", emp.Name, emp.ID, emp.ManagerID)
 			ceo = emp
 		}
 
@@ -140,8 +140,6 @@ func main() {
 
 	dataFile := flag.String("data", "data.csv", "file name")
 	flag.Parse()
-
-	log.Println("data file is", *dataFile)
 
 	employeeMap, err := loadData(*dataFile)
 	if err != nil {
