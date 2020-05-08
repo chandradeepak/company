@@ -2,9 +2,10 @@
 
         
 ## Assummptions
+-  Since it is given it is a small company, solution is developed in memory not with out sql  database
 -  Only one employee exists with out manager and he is the ceo
 -  Having more than one employee with out manager is going to stop the program
--  The Heirarchy is printed always from ceo
+-  The hierarchy is printed always from ceo
 -  The top structure always start with one single employee who is CEO
 -  CEO always exists in the data
 -  Having Circular dependency is going to fail the program
@@ -12,8 +13,8 @@
 -  Incorrect data include no employee ID and normal employee not having Manager
 -  Incorrect data also include where a manager ID exists but that employee ID doesn't exist
 -  Input is expected to be given in csv format with commas in between for the ease of parsing data
--  Data is assumed to be fitting in memory so the data strucutres used are in memory. we used a tree and a map
--  The length of names should not be too long for the ease of printing so that you can see clearly how the heirachical data is printed
+-  Data is assumed to be fitting in memory so the data structures used are in memory. we used a tree and a map
+-  The length of names should not be too long for the ease of printing so that you can see clearly how the hierarchy data is printed
 
 
 ## Input Data

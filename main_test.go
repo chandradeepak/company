@@ -29,17 +29,17 @@ func Test_Parsing(t *testing.T) {
 
 func Test_LoadData(t *testing.T) {
 	t.Run("empty ID", func(t *testing.T) {
-		empMap, err := loadData("data_duplicate.csv")
+		empMap, err := loadData("test/data_duplicate.csv")
 		require.Error(t, err)
 		require.Nil(t, empMap)
 	})
 	t.Run("employee ID empty", func(t *testing.T) {
-		empMap, err := loadData("empidempty.csv")
+		empMap, err := loadData("test/empidempty.csv")
 		require.Error(t, err)
 		require.Nil(t, empMap)
 	})
 	t.Run("wrong data format ID", func(t *testing.T) {
-		empMap, err := loadData("wrongdata.csv")
+		empMap, err := loadData("test/wrongdata.csv")
 		require.Error(t, err)
 		require.Nil(t, empMap)
 	})
@@ -47,7 +47,7 @@ func Test_LoadData(t *testing.T) {
 
 func Test_LinkRelationShip(t *testing.T) {
 	t.Run("no ceo", func(t *testing.T) {
-		empMap, err := loadData("noceo.csv")
+		empMap, err := loadData("test/noceo.csv")
 		require.NoError(t, err)
 		require.NotNil(t, empMap)
 		ceo, err := linkRelationShip(empMap)
@@ -56,7 +56,7 @@ func Test_LinkRelationShip(t *testing.T) {
 	})
 
 	t.Run("circular dependency", func(t *testing.T) {
-		empMap, err := loadData("circular.csv")
+		empMap, err := loadData("test/circular.csv")
 		require.NoError(t, err)
 		require.NotNil(t, empMap)
 		ceo, err := linkRelationShip(empMap)
